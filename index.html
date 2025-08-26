@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beginner's Morse Code</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Home Page -->
+  <div id="home-page">
+    <h1>Beginner's Morse Code</h1>
+    <p>Welcome! This app will help you learn the basics of Morse code and practice with conversions, enjoy!</p>
+    <button onclick="goToPage('menu-page')">Start</button>
+  </div>
+
+  <!-- Menu Page -->
+  <div id="menu-page" style="display:none;">
+    <h2>Main Menu</h2>
+    <button onclick="goToPage('basics-page')">Basics of Morse Code</button>
+    <button onclick="goToPage('converter-page')">Words & Sentences Converter</button>
+    <button onclick="goToPage('review-page')">We Care!</button>
+    <br><br>
+    <button onclick="goToPage('home-page')">Go Back</button>
+  </div>
+
+  <!-- Basics Page -->
+  <div id="basics-page" style="display:none;">
+    <h2>Basics of Morse Code</h2>
+    <p>Here are the letters, numbers, and some symbols with their Morse code:</p>
+    <table border="1" style="margin:auto; border-collapse:collapse;">
+      <tr><th>Character</th><th>Morse Code</th></tr>
+      <tr><td>A</td><td>.-</td></tr>
+      <tr><td>B</td><td>-...</td></tr>
+      <tr><td>C</td><td>-.-.</td></tr>
+      <tr><td>D</td><td>-..</td></tr>
+      <tr><td>E</td><td>.</td></tr>
+      <tr><td>F</td><td>..-.</td></tr>
+      <tr><td>G</td><td>--.</td></tr>
+      <tr><td>H</td><td>....</td></tr>
+      <tr><td>I</td><td>..</td></tr>
+      <tr><td>J</td><td>.---</td></tr>
+      <tr><td>K</td><td>-.-</td></tr>
+      <tr><td>L</td><td>.-..</td></tr>
+      <tr><td>M</td><td>--</td></tr>
+      <tr><td>N</td><td>-.</td></tr>
+      <tr><td>O</td><td>---</td></tr>
+      <tr><td>P</td><td>.--.</td></tr>
+      <tr><td>Q</td><td>--.-</td></tr>
+      <tr><td>R</td><td>.-.</td></tr>
+      <tr><td>S</td><td>...</td></tr>
+      <tr><td>T</td><td>-</td></tr>
+      <tr><td>U</td><td>..-</td></tr>
+      <tr><td>V</td><td>...-</td></tr>
+      <tr><td>W</td><td>.--</td></tr>
+      <tr><td>X</td><td>-..-</td></tr>
+      <tr><td>Y</td><td>-.--</td></tr>
+      <tr><td>Z</td><td>--..</td></tr>
+      <tr><td>0</td><td>-----</td></tr>
+      <tr><td>1</td><td>.----</td></tr>
+      <tr><td>2</td><td>..---</td></tr>
+      <tr><td>3</td><td>...--</td></tr>
+      <tr><td>4</td><td>....-</td></tr>
+      <tr><td>5</td><td>.....</td></tr>
+      <tr><td>6</td><td>-....</td></tr>
+      <tr><td>7</td><td>--...</td></tr>
+      <tr><td>8</td><td>---..</td></tr>
+      <tr><td>9</td><td>----.</td></tr>
+      <tr><td>?</td><td>..--..</td></tr>
+      <tr><td>!</td><td>-.-.--</td></tr>
+      <tr><td>.</td><td>.-.-.-</td></tr>
+      <tr><td>,</td><td>--..--</td></tr>
+    </table>
+    <br>
+    <button onclick="goToPage('menu-page')">Go Back</button>
+  </div>
+
+  <!-- Converter Page -->
+  <div id="converter-page" style="display:none;">
+    <h2>Words & Sentences Converter</h2>
+    <p>Type English text to convert into Morse code, or type Morse code to convert into English. Conversion will happen automatically as you type.</p>
+    <textarea id="converter-input" rows="5" cols="40" placeholder="Enter text or Morse code here..." oninput="autoConvert()"></textarea>
+    <br><br>
+    <textarea id="converter-output" rows="5" cols="40" placeholder="Converted result will appear here..." readonly></textarea>
+    <br><br>
+    <button onclick="speakEnglish()">Speak English</button>
+    <button onclick="playMorse()">Play Morse Code</button>
+    <br><br>
+    <button onclick="goToPage('menu-page')">Go Back</button>
+  </div>
+
+  <!-- Review Page -->
+  <div id="review-page" style="display:none;">
+    <h2>Submit Your Feedback</h2>
+    <p>We value your feedback! Please fill in the form below:</p>
+    <form id="feedback-form" action="https://formspree.io/f/xrblyagj" method="POST">
+      <label for="review-name">Your Name:</label><br>
+      <input type="text" id="review-name" name="name" required>
+      <span id="name-error" style="color:red; display:none;">Please enter a valid name (letters only).</span>
+      <br><br>
+      <label for="review-email">Your Email:</label><br>
+      <input type="email" id="review-email" name="_replyto" required>
+      <span id="email-error" style="color:red; display:none;">Please enter a valid email.</span>
+      <br><br>
+      <label for="review-message">Your Feedback:</label><br>
+      <textarea id="review-message" name="message" rows="5" required></textarea>
+      <br><br>
+      <button type="submit">Send Feedback</button>
+    </form>
+    <br>
+    <button onclick="goToPage('menu-page')">Go Back</button>
+  </div>
+
+  <script>
+    // Page navigation
+    function goToPage(pageId) {
+      const pages = ["home-page","menu-page","basics-page","converter-page","review-page"];
+      pages.forEach(id => {
+        document.getElementById(id).style.display = (id === pageId) ? "block" : "none";
+      });
+    }
+
+    // Morse code map
+    const morseCodeMap = {
+      'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.',
+      'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---',
+      'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---',
+      'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-',
+      'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--',
+      'Z': '--..', '0': '-----', '1': '.----','2': '..---','3': '...--',
+      '4': '....-','5': '.....','6': '-....','7': '--...','8': '---..',
+      '9': '----.','?':'..--..','!':'-.-.--','.':'.-.-.-',',':'--..--',
+      ' ':'/'
+    };
+    const inverseMorseMap = {};
+    for (let key in morseCodeMap) inverseMorseMap[morseCodeMap[key]] = key;
+
+    // Converter functions
+    function convertToMorse() {
+      let text = document.getElementById("converter-input").value.toUpperCase();
+      let morse = text.split('').map(c => morseCodeMap[c] || '').join(' ');
+      document.getElementById("converter-output").value = morse;
+    }
+
+    function convertToEnglish() {
+      let morseText = document.getElementById("converter-input").value.trim();
+      let english = morseText.split(' ').map(code => inverseMorseMap[code] || '').join('');
+      document.getElementById("converter-output").value = english;
+    }
+
+    // Auto convert
+    function autoConvert() {
+      const input = document.getElementById("converter-input").value;
+      if (/^[.\-\/\s]+$/.test(input)) {
+        convertToEnglish();
+      } else {
+        convertToMorse();
+      }
+    }
+
+    // Voice features
+    function speakEnglish() {
+      const text = document.getElementById("converter-output").value;
+      if (!text) return;
+      const utter = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(utter);
+    }
+
+    function playMorse() {
+      const morse = document.getElementById("converter-output").value;
+      if (!morse) return;
+      const unit = 200; // dot duration
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      let time = audioCtx.currentTime;
+      function playTone(duration){
+        const oscillator = audioCtx.createOscillator();
+        oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+        oscillator.connect(audioCtx.destination);
+        oscillator.start(time);
+        oscillator.stop(time + duration/1000);
+        time += duration/1000 + unit/1000;
+      }
+      for (let char of morse){
+        if(char === '.') playTone(unit);
+        else if(char === '-') playTone(unit*3);
+        else if(char === ' ') time += unit/1000;
+        else if(char === '/') time += unit*3/1000;
+      }
+    }
+
+    // Feedback validation
+    document.getElementById("feedback-form").addEventListener("submit", function(event){
+      let valid = true;
+      const name = document.getElementById("review-name").value;
+      const nameRegex = /^[A-Za-z\s]+$/;
+      if(!nameRegex.test(name)){ document.getElementById("name-error").style.display="inline"; valid=false; }
+      else document.getElementById("name-error").style.display="none";
+
+      const email = document.getElementById("review-email").value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!emailRegex.test(email)){ document.getElementById("email-error").style.display="inline"; valid=false; }
+      else document.getElementById("email-error").style.display="none";
+
+      if(!valid) event.preventDefault();
+    });
+  </script>
+</body>
+</html>
+
+
+
